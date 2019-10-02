@@ -11,7 +11,49 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    @all_ratings = Movie.all_ratings
+
+    need_redirect = false 
+
+    @sort_method = params[:sort_by]
+    if(@sort_method == nil)
+      @sort_method = session[:sort_by]
+      if(@sort_method == nil)
+        @sort_method = "title"
+        session[:sort_by] = @sort_method
+      end
+      need_redirect = true
+    else
+      session[:sort_by] = @sort_method
+    end
+
+    @selected_ratings = params[:ratings]
+    if(@selected_ratings == nil || @selected_ratings.empty?)
+      @selected_ratings = session[:ratings]
+      if(@selected_ratings == nil) # if not yet stored in session
+        @selected_ratings = @all_ratings
+        session[:ratings] = @selected_ratings
+      end
+      need_redirect = true
+    else
+      if(@selected_ratings.kind_of?(Hash))
+        @selected_ratings = @selected_ratings.keys
+      end
+      session[:ratings] = @selected_ratings
+    end
+
+    if need_redirect
+      flash.keep
+      redirect_to movies_path(:sort_by => @sort_method, :ratings => @selected_ratings)
+    end
+    
+    if @sort_method == "title"
+      @movies = Movie.where(["rating IN (?)", @selected_ratings]).order("title ASC")
+    elsif @sort_method == "release_date"
+      @movies = Movie.where(["rating IN (?)", @selected_ratings]).order("release_date ASC")
+    else # Then using unknown sort method
+      @movies = Movie.all
+    end
   end
 
   def new
