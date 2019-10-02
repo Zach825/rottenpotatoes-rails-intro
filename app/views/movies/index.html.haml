@@ -9,6 +9,8 @@
     = check_box_tag("ratings[#{rating}]", 1, @selected_ratings.include?(rating), :id => "ratings_#{rating}")
   = submit_tag 'Refresh', :id => "ratings_submit"
 
+-# keeping track of sort_method allows the use of if/else statements to decide how the list should be sorted at any given time,
+-# including when the page is refreshed after filtering ratings
 %table#movies.table.table-striped.col-md-12
   %thead
     %tr

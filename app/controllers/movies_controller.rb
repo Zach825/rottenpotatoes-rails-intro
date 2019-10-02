@@ -12,11 +12,10 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = Movie.all_ratings
-
     need_redirect = false 
-
-    @sort_method = params[:sort_by]
-    if(@sort_method == nil)
+    
+    @sort_method = params[:sort_by] #sort_method used to remember if the page is currently sorting by title or release date
+    if(@sort_method == nil) #nil used for default
       @sort_method = session[:sort_by]
       if(@sort_method == nil)
         @sort_method = "title"
@@ -26,8 +25,9 @@ class MoviesController < ApplicationController
     else
       session[:sort_by] = @sort_method
     end
-
-    @selected_ratings = params[:ratings]
+    
+    
+    @selected_ratings = params[:ratings] #sorts movies based on ratings selected
     if(@selected_ratings == nil || @selected_ratings.empty?)
       @selected_ratings = session[:ratings]
       if(@selected_ratings == nil) # if not yet stored in session
