@@ -26,7 +26,7 @@ class MoviesController < ApplicationController
       session[:sort_by] = @sort_method
     end
     
-    
+  
     @selected_ratings = params[:ratings] #sorts movies based on ratings selected
     if(@selected_ratings == nil || @selected_ratings.empty?)
       @selected_ratings = session[:ratings]
