@@ -41,7 +41,6 @@ class MoviesController < ApplicationController
       end
       session[:ratings] = @selected_ratings
     end
-
     if need_redirect
       flash.keep
       redirect_to movies_path(:sort_by => @sort_method, :ratings => @selected_ratings)
